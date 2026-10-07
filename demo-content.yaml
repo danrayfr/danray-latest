@@ -45,8 +45,8 @@ testimonials:
     photo: "assets/demo-avery.svg"
     name: "Avery Morgan"
     role: "Engineering Lead, Northstar Labs"
-    relationship: "Fictional colleague · Sample recommendation letter"
-    letter: "sample-letter.html"
+    relationship: "Colleague · Sample recommendation letter"
+    letter: "letter.html?id=avery"
     letter_label: "Read sample letter ↗"
   jordan:
     quote: "A thoughtful engineer who listens closely, follows the evidence, and takes ownership. The combination of software development experience and clear communication made complex support conversations much easier."
@@ -54,6 +54,40 @@ testimonials:
     photo: "assets/demo-jordan.svg"
     name: "Jordan Lee"
     role: "Customer Success Lead, Bridgeway Software"
-    relationship: "Fictional colleague · Sample feedback"
+    relationship: "Colleague · Sample feedback"
     letter: ""
     letter_label: ""
+
+# Fictional education, articles, and letter rows for visualizing the layout.
+education:
+  degree:
+    dates: "2014 – 2018"
+    qualification: "Bachelor of Science in Computer Science"
+    school: "Sample University"
+    image: "assets/demo-campus.svg"
+    description: "A sample education entry showing how a degree, school, and dates will appear."
+  course:
+    dates: "2025"
+    qualification: "Certificate in Applied AI Development"
+    school: "Sample Learning Academy"
+    image: "assets/demo-academy.svg"
+    description: "A sample course entry for visualizing continuing education."
+articles:
+  investigation:
+    year: "2026"
+    title: "Turning a complex support issue into a clear next step"
+    summary: "A sample article about investigating carefully, following evidence, and keeping customers informed."
+    url: ""
+    sample_text: "This is a sample article. A future article could walk through the customer’s goal, the evidence gathered, and how the investigation led to a practical next step."
+  tools:
+    year: "2026"
+    title: "Building internal tools around real workflows"
+    summary: "A sample article about making everyday support and engineering work a little easier."
+    url: ""
+    sample_text: "This is a sample article. A future article could explore a recurring workflow, a small tool built to improve it, and what the team learned from using it."
+  ai:
+    year: "2025"
+    title: "Exploring agentic AI in engineering workflows"
+    summary: "A sample article about prototyping useful AI workflows and evaluating where they help."
+    url: ""
+    sample_text: "This is a sample article. A future article could describe a prototype, how its output was evaluated, and where human judgment remained essential."

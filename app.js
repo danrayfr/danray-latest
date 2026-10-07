@@ -41,6 +41,32 @@ function safeLink(value, localAllowed = false) {
   } catch (_) { /* An invalid optional URL is omitted. */ }
   return null;
 }
+function letterAction(className, label) {
+  const link = element('a', className);
+  link.append(element('span', 'letter-action-label', 'Read Letter'));
+  return link;
+}
+function renderLetter(letters, profileName) {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id') || document.body.dataset.letterId;
+  const item = id && Object.hasOwn(letters, id) ? letters[id] : null;
+  const body = document.getElementById('letter-body');
+  if (!item || !item.body || !item.body.trim()) {
+    setText('letter-heading', 'Letter not found');
+    setText('letter-body', 'This letter is unavailable. Return to Reviews to choose another letter.');
+    document.title = `Letter not found | ${profileName}`;
+    return;
+  }
+  setText('letter-heading', item.title || 'Letter of recommendation');
+  setText('letter-date', item.date);
+  setText('letter-salutation', item.salutation);
+  item.body.split(/\n\s*\n/).filter(text => text.trim()).forEach(text => body.append(element('p', '', text.trim())));
+  const signature = document.getElementById('letter-signature');
+  if (item.closing) signature.append(element('span', '', item.closing));
+  signature.append(element('strong', '', item.name));
+  if (item.role) signature.append(element('span', '', item.role));
+  document.title = `${item.name} — Recommendation | ${profileName}`;
+}
 function renderPortfolio(data) {
   const p = data.profile;
   setText('name', p.name); setText('location', p.location); setText('headline', p.headline);
@@ -84,7 +110,7 @@ function renderPortfolio(data) {
     if (item.relationship) card.append(element('p', 'recommendation-context', item.relationship));
     const letter = safeLink(item.letter, true);
     if (letter) {
-      const link = element('a', 'letter-link', item.letter_label || 'Read full letter ↗');
+      const link = letterAction('letter-link', item.letter_label || 'Read full letter');
       link.href = letter; link.target = '_blank'; link.rel = 'noopener noreferrer'; card.append(link);
     }
     document.getElementById('testimonials').append(card);
@@ -110,11 +136,97 @@ function renderPortfolio(data) {
     }
     row.append(icon, body); document.getElementById('timeline').append(row);
   });
-  if (document.getElementById('skills')) Object.values(data.skills).forEach(item => {
-    const card = element('div'); const list = element('ul');
-    item.items.split('|').forEach(skill => list.append(element('li', '', skill.trim())));
-    card.append(element('h3', '', item.title), list); document.getElementById('skills').append(card);
+  const skills = document.getElementById('skills');
+  if (skills) Object.values(data.skills || {}).forEach(item => {
+    const row = element('div', 'skill-row');
+    const list = element('ul', 'skill-items');
+    item.items.split('|').filter(skill => skill.trim()).forEach(skill => list.append(element('li', '', skill.trim())));
+    row.append(element('h3', '', `${item.title}:`), list);
+    skills.append(row);
   });
+  const education = document.getElementById('education');
+  if (education) {
+    const entries = Object.values(data.education || {}).filter(item => item.qualification || item.school);
+    if (!entries.length) education.append(element('p', 'empty-state', 'Education details coming soon.'));
+    entries.forEach(item => {
+      const record = element('article', 'education-item');
+      const imageUrl = safeLink(item.image, true);
+      if (imageUrl) {
+        record.className += ' education-with-image';
+        const image = element('img', 'education-image'); image.src = imageUrl;
+        image.alt = ''; image.loading = 'lazy'; image.setAttribute('aria-hidden', 'true');
+        image.addEventListener('error', () => { image.hidden = true; record.className = 'education-item'; });
+        record.append(image);
+      }
+      const content = element('div', 'education-content');
+      if (item.dates) content.append(element('p', 'record-date', item.dates));
+      if (item.qualification) content.append(element('h3', '', item.qualification));
+      if (item.school) content.append(element('p', 'muted', item.school));
+      if (item.description) content.append(element('p', 'muted', item.description));
+      record.append(content); education.append(record);
+    });
+  }
+  const articles = document.getElementById('articles');
+  if (articles) {
+    const entries = Object.values(data.articles || {}).filter(item => item.title);
+    if (!entries.length) articles.append(element('p', 'empty-state', 'Articles coming soon.'));
+    entries.forEach(item => {
+      const record = element('article', 'article-item');
+      if (item.year) record.append(element('p', 'record-date', item.year));
+      record.append(element('h3', '', item.title));
+      if (item.summary) record.append(element('p', 'muted', item.summary));
+      const href = safeLink(item.url, true);
+      if (href) {
+        const link = element('a', 'reading-link', 'Continue reading'); link.href = href;
+        if (new URL(href).origin !== location.origin) { link.target = '_blank'; link.rel = 'noopener noreferrer'; }
+        record.append(link);
+      } else if (data.design_preview && item.sample_text) {
+        const preview = element('details', 'article-preview');
+        preview.append(element('summary', '', 'Continue reading sample'), element('p', 'muted', item.sample_text));
+        record.append(preview);
+      }
+      articles.append(record);
+    });
+  }
+  const letters = document.getElementById('recommendation-letters');
+  if (letters) {
+    const seen = new Set();
+    const entries = [...Object.values(data.testimonials || {}), ...Object.values(data.recommendation_letters || {})].filter(item => {
+      const href = safeLink(item.letter, true);
+      if (!href || seen.has(href)) return false;
+      seen.add(href); return true;
+    });
+    if (!entries.length) letters.append(element('p', 'empty-state', 'Recommendation letters coming soon.'));
+    const list = element('div', 'letter-list'); letters.append(list);
+    let moreList;
+    if (entries.length > 4) {
+      const more = element('details', 'more-letters');
+      more.append(element('summary', '', `View ${entries.length - 4} more ${entries.length - 4 === 1 ? 'letter' : 'letters'}`));
+      moreList = element('div', 'letter-list'); more.append(moreList); letters.append(more);
+    }
+    entries.forEach((item, index) => {
+      const row = element('article', 'letter-row');
+      const info = element('div', 'letter-info');
+      info.append(element('h3', '', item.name || 'Recommendation letter'));
+      if (item.role) info.append(element('p', 'muted', item.role));
+      if (item.relationship) info.append(element('p', 'letter-relationship', item.relationship));
+      const link = letterAction('letter-read', item.letter_label || 'Read letter');
+      link.href = safeLink(item.letter, true); link.target = '_blank'; link.rel = 'noopener noreferrer';
+      link.setAttribute('aria-label', `${item.letter_label || 'Read letter'} from ${item.name || 'a colleague'} (opens in a new tab)`);
+      row.append(info, link); (index < 4 ? list : moreList).append(row);
+    });
+  }
+  const footerLinks = document.getElementById('footer-links');
+  if (footerLinks) {
+    const github = safeLink(p.github);
+    const linkedin = safeLink(p.linkedin);
+    if (github || linkedin) footerLinks.replaceChildren();
+    [['LinkedIn', linkedin], ['GitHub', github]].forEach(([title, href]) => {
+      if (!href) return;
+      const link = element('a', '', title); link.href = href; link.target = '_blank'; link.rel = 'noopener noreferrer';
+      footerLinks.append(link);
+    });
+  }
   const links = document.getElementById('contact-links');
   if (!links) return;
   if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email)) {
@@ -133,7 +245,10 @@ if (typeof document !== 'undefined') {
   const toggle = document.getElementById('theme-toggle');
   function applyTheme(dark) {
     document.body.dataset.theme = dark ? 'dark' : 'light';
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    if (themeColor) themeColor.content = dark ? '#24272b' : '#fafaf8';
     toggle.textContent = dark ? 'Light ◐' : 'Dark ◐';
+    toggle.setAttribute('title', dark ? 'Switch to light theme' : 'Switch to dark theme');
     toggle.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
   }
   let savedTheme; try { savedTheme = localStorage.getItem('portfolio-theme'); } catch (_) {}
@@ -146,20 +261,31 @@ if (typeof document !== 'undefined') {
     .then(response => { if (!response.ok) throw new Error('Content request failed'); return response.text(); })
     .then(async source => {
       const data = parseContentYaml(source);
-      if (data.preview && data.preview.enabled === 'true' && document.getElementById('demo-notice')) {
+      if (data.preview && data.preview.enabled === 'true' && (document.getElementById('timeline') || document.getElementById('testimonials'))) {
         const response = await fetch('./demo-content.yaml', {cache: 'no-store'});
         if (!response.ok) throw new Error('Preview content request failed');
         const demo = parseContentYaml(await response.text());
         data.experience = demo.experience; data.testimonials = demo.testimonials;
-        document.getElementById('demo-notice').hidden = false;
+        data.education = demo.education; data.articles = demo.articles;
+        data.design_preview = true;
         if (document.body.dataset.page === 'reviews') {
           setText('review-rating', demo.summary.rating);
           setText('review-count', `Based on ${demo.summary.count} sample reviews`);
           document.getElementById('review-summary').hidden = false;
-          document.getElementById('letter-feature').hidden = false;
         }
       }
+      if (document.getElementById('recommendation-letters') || document.getElementById('letter-body')) {
+        const response = await fetch('./letters.yaml', {cache: 'no-store'});
+        if (!response.ok) throw new Error('Recommendation letters request failed');
+        data.letters = parseContentYaml(await response.text()).letters || {};
+        data.recommendation_letters = Object.fromEntries(Object.entries(data.letters).filter(([, item]) => item.name && ((item.body && item.body.trim()) || safeLink(item.file, true))).map(([id, item]) => [id, {
+          ...item,
+          letter: safeLink(item.file, true) ? item.file : `letter.html?id=${encodeURIComponent(id)}`,
+          letter_label: item.letter_label || 'Read letter ↗'
+        }]));
+      }
       renderPortfolio(data);
+      if (document.getElementById('letter-body')) renderLetter(data.letters, data.profile.name);
     })
     .catch(error => { document.getElementById('load-error').hidden = false; console.error(error); });
 }

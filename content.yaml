@@ -126,3 +126,19 @@ testimonials:
 # Set false to show your real experience and approved recommendations.
 preview:
   enabled: "true"
+
+# Add confirmed education details. Empty entries show a coming-soon placeholder.
+education:
+  primary:
+    dates: ""
+    qualification: ""
+    school: ""
+    image: ""
+    description: ""
+# Add published articles with their title, year, summary, and URL.
+articles:
+  first:
+    year: ""
+    title: ""
+    summary: ""
+    url: ""

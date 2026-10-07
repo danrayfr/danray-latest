@@ -4,10 +4,11 @@ A responsive HTML, CSS, and JavaScript portfolio for GitHub Pages. No framework,
 
 ## Pages
 
-- `index.html`: introduction, personality, experience totals, company timeline, and contact.
-- `work.html`: company experience timeline, selected work, and technical skills.
+- `index.html`: introduction, personality, experience totals, skills, company timeline, education, articles, and contact.
+- `work.html`: company experience timeline, selected work, technical skills, and education.
 - `reviews.html`: reviews, recommendations, and full-letter links.
-- `sample-letter.html`: clearly marked fictional letter used for the design preview.
+- `letter.html`: one shared recommendation page; choose a letter with `?id=LETTER_ID`.
+- `sample-letter.html`: existing sample URL, now displaying the `avery` record from `letters.yaml`.
 
 Home, Work, and Reviews navigate between real HTML files. Work and Reviews are not homepage sections or hash routes. Shared scripts render only the content containers present on each page.
 
@@ -27,7 +28,7 @@ Use a web server rather than double-clicking index.html: JavaScript fetches the 
 
 `content.yaml` holds the real profile, projects, skills, experience, and testimonial slots. `demo-content.yaml` holds fictional companies, dates, contributions, reviewer identities, quotes, and a sample rating. Fictional demo icons, illustrated avatars, and the project preview are in `assets/demo-*.svg`.
 
-The preview is currently enabled to let you see the requested designs. Work and Reviews show visible notices that their company timeline and review content are fictional. Home and the project/skill sections continue to use the supplied real background.
+The preview is currently enabled to let you see the requested designs. Visible design-preview banners and fictional-content notices have been removed. Sample names, sample letter labels, and editable placeholders remain. Home and the project/skill sections continue to use the supplied real background.
 
 To show your real timeline and approved recommendations, update the real records in `content.yaml`, then set:
 
@@ -36,9 +37,9 @@ preview:
   enabled: "false"
 ```
 
-This removes the preview notice, sample rating row, and sample letter feature, and uses the real experience and recommendation records. Approved recommendation letters do not need a numeric rating. Empty quotes remain clearly labeled draft slots. You can remove unused records.
+This removes the sample rating row and uses the real experience, education, article, and recommendation records. The static support catchphrase remains visible. Approved recommendation letters do not need a numeric rating. Empty quotes remain clearly labeled draft slots. You can remove unused records.
 
-`sample-letter.html` remains a publicly accessible, clearly fictional sample file even when preview mode is off. Delete it and the unused demo assets before publication if desired.
+`sample-letter.html` remains a publicly accessible, sample URL even when preview mode is off. Its text comes from `letters.yaml`. Delete it and the unused demo assets before publication if desired.
 
 ## Company experience
 
@@ -84,7 +85,7 @@ Edit records under `testimonials` in `content.yaml`:
 
 Create assets/letters and add an approved PDF. Blank photo paths use initials; blank letter paths omit the link. Letters open in another tab and may display or download according to browser settings. Upload the approved public version of a letter, with private details removed where appropriate.
 
-The feature panel in demo mode opens the fictional sample letter. It is a document link, not a video player. The illustrated reviewer avatars are fictional design assets.
+The Reviews feature panel displays the catchphrase “Support as a feature” and the supporting line “Good engineering leaves people feeling confident”. It is a static panel with no link and remains visible in both sample and real-content modes. The illustrated reviewer avatars are fictional design assets.
 
 ## Profile and contact
 
@@ -134,6 +135,61 @@ JavaScript syntax and both YAML files were checked. All four pages were exercise
 
 The site includes semantic sections, native keyboard-accessible project disclosures, visible focus states, skip navigation, reduced-motion support, responsive layouts, and an optional locally remembered dark theme. Content is inserted as text rather than interpreted HTML. Contact links do not submit data to a server.
 
-The homepage includes the same reference-style company timeline as Work. Preview mode shows the same fictional sample entries on both pages; disabling it uses the real YAML experience entries on both. Homepage project cards link to the corresponding project on work.html. Dark mode uses navy backgrounds and blue accents across all pages.
+The homepage includes the same reference-style company timeline as Work. Preview mode shows the same fictional sample entries on both pages; disabling it uses the real YAML experience entries on both. Homepage project cards link to the corresponding project on work.html. The original layout is retained. The Warm Slate & Blue palette uses warm off-white backgrounds, white cards, slate text, and restrained blue accents in light mode. Dark mode uses charcoal backgrounds, softer slate cards, pale text, and light blue accents. Education entries use subtle bordered cards in both themes.
 
 Both YAML requests use fetch cache: no-store, so browsers fetch the latest content without revalidating a stored copy (which can otherwise show HTTP 304 in the Network panel). A 304 is a cache validation response, not a YAML parsing error.
+
+## Education, articles, and footer links
+
+The `education` and `articles` mappings in `content.yaml` start empty. With preview enabled, `demo-content.yaml` provides two fictional education entries and three fictional articles. Sample articles expand inline. With preview disabled, the site uses the real records and shows coming-soon text for empty sections. Add more named records using the same structure:
+
+```yaml
+education:
+  primary:
+    dates: "YOUR YEARS"
+    qualification: "YOUR QUALIFICATION"
+    school: "YOUR SCHOOL"
+    description: ""
+articles:
+  first:
+    year: "PUBLICATION YEAR"
+    title: "YOUR ARTICLE TITLE"
+    summary: "A short description."
+    url: "https://example.com/your-article"
+```
+
+Fill in `profile.github` and `profile.linkedin` to show live links in the shared footer. Until a profile URL is supplied, the footer displays GitHub as an inactive placeholder. Education and articles use sample records while preview is enabled. Recommendation letters always come from the separate `letters.yaml` file. The homepage Skills section reuses your existing skills and displays them as category/value rows. All original homepage sections remain in place.
+
+## Recommendation letters in YAML
+
+All recommendation letter content lives in `letters.yaml`. The file starts with six editable samples. Reviews keeps the same compact list, with four letters visible and the remaining letters under “View more letters”. Each text letter opens the shared `letter.html` page in a new tab.
+
+Add a named record under `letters`. The name becomes its ID and URL; for example, `manager` opens `letter.html?id=manager`:
+
+```yaml
+letters:
+  manager:
+    name: "Author name"
+    role: "Title and company"
+    relationship: "My direct manager"
+    date: "Letter date"
+    title: "Letter of recommendation"
+    salutation: "To whom it may concern,"
+    body: "First paragraph.\n\nSecond paragraph."
+    closing: "Kind regards,"
+    file: ""
+```
+
+Use the existing quoted-string YAML format: two-space indentation and `\n\n` between paragraphs. Text is displayed as plain text, including when it contains HTML-like characters. No new HTML file is needed for another letter. Keep the record ID stable to preserve existing links.
+
+If you already have a PDF or image, set `file` to its relative path, such as `"assets/letters/manager.pdf"`, and leave `body` empty. The list opens the file directly. You can optionally set `letter_label: "Read letter (PDF) ↗"`. Include each referenced file when deploying.
+
+Letters linked from `testimonials` are still included in the list; duplicate URLs appear once. To link a testimonial to a YAML letter, set its `letter` field to `"letter.html?id=manager"`. Records with no author or no usable body/file are omitted. Unknown letter IDs show a useful message and a link back to Reviews. The `letters.yaml` records are independent of the preview toggle, so your approved letters will not be replaced by demo data.
+
+Work experience appears before Skills on the homepage.
+
+Education cards use a two-column grid on larger screens and stack on mobile. Set each education record's optional `image` field to a local school image, for example `"assets/school-campus.jpg"`. Images fade into the card surface above the text, with a quieter treatment in dark mode. Empty or failed images leave a plain card. The preview uses two fictional campus illustrations (`assets/demo-campus.svg` and `assets/demo-academy.svg`), not photographs of real schools.
+
+## Typography
+
+Ubuntu is used for headings, body text, navigation, and education cards. Ubuntu Mono is used for dates, project numbers, tags, and small technical labels. The fonts are bundled locally in `assets/fonts`, including the Ubuntu Font Licence and copyright notice; there are no external font service requests. Font loading uses `font-display: swap` and system fallbacks. Keep the font files and their license in the deployed site.
