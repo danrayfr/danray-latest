@@ -1,0 +1,128 @@
+# Edit this file to personalize the portfolio. Use two spaces for indentation.
+# Text must be double quoted. Leave contact links empty until ready.
+profile:
+  name: "Dan Ray Rollan"
+  short_name: "Dan Ray"
+  initials: "DR"
+  location: "Manila, Philippines"
+  role: "Developer support. Technical support. Software engineering."
+  headline: "Engineering with people in mind."
+  intro: "I connect the people using a product with the people building it. I bring a software engineer’s perspective to complex support problems, and a support engineer’s empathy to the software I build."
+  total_years: "7"
+  development_years: "5"
+  experience_note: "Overall experience includes my internship working on a company’s production product."
+  email: ""
+  linkedin: ""
+  github: ""
+  resume: ""
+  portrait: ""
+  contact_note: "Interested in developer support, technical support, and engineering enablement opportunities."
+about:
+  heading: "A curious engineer. A calm voice on the other side."
+  text: "I enjoy getting to the root of a problem, making the complicated understandable, and helping someone feel confident about their next step. My work brings together hands-on troubleshooting, software development, and thoughtful customer communication."
+  secondary: "Beyond resolving a ticket, I look for what the team can learn: a clearer explanation, a better tool, a repeatable process, or knowledge that makes the next investigation easier."
+principles:
+  listen:
+    title: "Listen before solving"
+    text: "Understand the customer’s goal and the impact behind the technical issue."
+  investigate:
+    title: "Follow the evidence"
+    text: "Reproduce the behavior, read the logs, test assumptions, and explain what is confirmed."
+  ownership:
+    title: "Make the next step clear"
+    text: "Keep people informed and turn findings into practical actions."
+projects:
+  support:
+    number: "01"
+    category: "TECHNICAL SUPPORT"
+    title: "From complex behavior to a clear path forward"
+    summary: "Investigating endpoint patching, policy execution, agent connectivity, and software detection across Windows and macOS."
+    tags: "Windows & macOS | PowerShell | Bash | Log analysis"
+    context: "Working as a Technical Support Engineer for Automox through SupportNinja, I help customers understand and troubleshoot endpoint management behavior."
+    approach: "I compare agent and operating system logs, validate policy configuration, reproduce reported behavior, and collaborate on escalations when an issue needs deeper investigation."
+    takeaway: "The customer receives a clear explanation of the evidence, what still needs validation, and the next practical step."
+  development:
+    number: "02"
+    category: "SOFTWARE ENGINEERING"
+    title: "Building tools around real workflows"
+    summary: "A Rails ticketing and quality assurance application, and a gamified learning platform created for a hackathon."
+    tags: "Ruby on Rails | Internal tools | Learning systems"
+    context: "My background includes five years of professional software development, with hands-on work on applications that support operational and learning workflows."
+    approach: "I translate workflow needs into application behavior, bringing both implementation experience and an understanding of how people use and troubleshoot software."
+    takeaway: "The gamified learning platform was part of a winning hackathon project. Source links and project screenshots can be added as available."
+  ai:
+    number: "03"
+    category: "AGENTIC AI"
+    title: "Exploring more useful engineering workflows"
+    summary: "Hands-on learning and prototyping with agentic AI, informed by day-to-day support and software engineering work."
+    tags: "Agentic AI | Prototyping | Technical workflows"
+    context: "I am developing my knowledge and practical experience in agentic AI development and AI-driven technical workflows."
+    approach: "I explore how AI-powered prototypes can help engineers work through technical problems and turn repeated tasks into more useful workflows."
+    takeaway: "This is an evolving area of my practice. I bring a software engineering foundation and real support experience to evaluating where AI can help."
+experience:
+  current:
+    initials: "SN"
+    logo: ""
+    dates: ""
+    contributions: "Investigate cross-platform patching, software detection, and agent behavior. | Validate APIs and integrations, reproduce issues, and support technical escalations. | Translate findings into clear customer updates and next steps."
+    project_url: ""
+    project_title: ""
+    project_summary: ""
+    project_image: ""
+    label: "CURRENT FOCUS"
+    title: "Technical Support Engineer"
+    company: "SupportNinja · Automox"
+    text: "Customer-facing troubleshooting across endpoint management, patching, APIs, integrations, and scripting. Connecting customer findings with engineering investigations and clear follow-through."
+  engineering:
+    initials: "SE"
+    logo: ""
+    dates: ""
+    contributions: "Build and maintain applications with Ruby on Rails. | Develop tools around ticketing, quality assurance, and learning workflows."
+    label: "5 YEARS IN DEVELOPMENT"
+    title: "Software engineering foundation"
+    company: "Ruby on Rails · Product development"
+    text: "Professional software development experience, including application development and internal tools. My internship also involved contributing to a company’s actual product."
+  enablement:
+    initials: "KT"
+    logo: ""
+    dates: ""
+    contributions: "Mentor colleagues and review response quality. | Create internal resources for bug handling, escalation, and handoff."
+    label: "ACROSS MY WORK"
+    title: "Knowledge sharing & enablement"
+    company: "Coaching · Documentation · Quality"
+    text: "Quality audits, mentoring, response quality guidance, and internal knowledge resources for troubleshooting, escalation, and handoff."
+skills:
+  support:
+    title: "Support & investigation"
+    items: "API troubleshooting | Integrations | Log analysis | Reproduction | Escalation | Customer communication"
+  systems:
+    title: "Systems & automation"
+    items: "PowerShell | Bash | Windows patching | macOS patching | Endpoint management"
+  building:
+    title: "Development & emerging work"
+    items: "Ruby on Rails | Software engineering | Internal tools | Agentic AI | AI prototyping"
+# Add approved, genuine quotes here. Empty quotes show an honest draft state.
+# You can add more records with the same keys, or delete these records.
+testimonials:
+  customer:
+    quote: ""
+    initials: ""
+    photo: ""
+    relationship: ""
+    letter: ""
+    letter_label: "Read full letter ↗"
+    name: "Customer recommendation"
+    role: "Approved customer testimonial"
+  colleague:
+    quote: ""
+    initials: ""
+    photo: ""
+    relationship: ""
+    letter: ""
+    letter_label: "Read full letter ↗"
+    name: "Colleague recommendation"
+    role: "Approved colleague testimonial"
+
+# Set false to show your real experience and approved recommendations.
+preview:
+  enabled: "true"
