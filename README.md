@@ -8,7 +8,7 @@ A responsive HTML, CSS, and JavaScript portfolio for GitHub Pages. No framework,
 - `work.html`: company experience timeline, selected work, technical skills, and education.
 - `reviews.html`: reviews, recommendations, and full-letter links.
 - `letter.html`: one shared recommendation page; choose a letter with `?id=LETTER_ID`.
-- `sample-letter.html`: existing sample URL, now displaying the `avery` record from `letters.yaml`.
+- `sample-letter.html`: existing sample URL, now displaying the `brendan_beyer` record from `letters.yaml`.
 
 Home, Work, and Reviews navigate between real HTML files. Work and Reviews are not homepage sections or hash routes. Shared scripts render only the content containers present on each page.
 
@@ -24,22 +24,17 @@ Open http://localhost:8000. You can also open http://localhost:8000/work.html or
 
 Use a web server rather than double-clicking index.html: JavaScript fetches the YAML files, which generally does not work through file://. Edit content, save, and refresh your browser.
 
-## Design preview and real content
+## Current content
 
-`content.yaml` holds the real profile, projects, skills, experience, and testimonial slots. `demo-content.yaml` holds fictional companies, dates, contributions, reviewer identities, quotes, and a sample rating. Fictional demo icons, illustrated avatars, and the project preview are in `assets/demo-*.svg`.
+`content.yaml` contains the profile, experience, projects, skills, and education updated from `Dan Ray Rollan_latest.pdf`. Real content is active (`preview.enabled: "false"`). The old `demo-content.yaml` is retained as inactive sample text; its demo illustrations have been removed. It does not supply the current pages.
 
-The preview is currently enabled to let you see the requested designs. Visible design-preview banners and fictional-content notices have been removed. Sample names, sample letter labels, and editable placeholders remain. Home and the project/skill sections continue to use the supplied real background.
+The profile uses the résumé's seven-plus years of combined professional experience and shows software engineering work beginning in 2020. It no longer claims five years of professional development or an internship that is not listed in the updated résumé. SupportNinja roles, independent projects, ChatGenie, Project Imahe Labs, Stock Knowledge, and Didget Inc. use the supplied role titles and dates.
 
-To show your real timeline and approved recommendations, update the real records in `content.yaml`, then set:
+`assets/Dan-Ray-Rollan-Resume.pdf` is an unchanged copy of the supplied résumé and is linked from Contact. Email and phone come from the résumé. The GitHub profile comes from the existing repository owner (`danrayfr`). LinkedIn is linked in Contact and the footer; article links are deferred and the empty Articles section is hidden until records are added. The supplied portrait appears in the navigation and profile. Contact uses simple SVG icon links for LinkedIn, GitHub, and the résumé.
 
-```yaml
-preview:
-  enabled: "false"
-```
+The education card contains the Universidad De Manila degree, years, and academic achievements. Its background is a decorative UDM monogram, not an official logo or a photograph of the campus. Replace the `image` field with a real school photograph if one is supplied later.
 
-This removes the sample rating row and uses the real experience, education, article, and recommendation records. The static support catchphrase remains visible. Approved recommendation letters do not need a numeric rating. Empty quotes remain clearly labeled draft slots. You can remove unused records.
-
-`sample-letter.html` remains a publicly accessible, sample URL even when preview mode is off. Its text comes from `letters.yaml`. Delete it and the unused demo assets before publication if desired.
+Recommendation letter bodies remain in `letters.yaml`; résumé updates do not replace or rewrite them.
 
 ## Company experience
 
@@ -65,7 +60,7 @@ Edit each entry under `experience` in `content.yaml`. Add records in display ord
 
 Update the existing record rather than replacing the whole file with this snippet. Add logo/image files to assets and use those relative paths. If no logo is supplied, initials are displayed. Blank `dates` uses `label`. A project preview appears when both `project_url` and `project_title` are supplied. For a local project anchor, use `#project-02` for the project whose `number` is `02` on the Work page.
 
-The real experience records retain broad engineering and enablement descriptions until exact employer names, roles, and dates are supplied. Demo dates and employers are not actual career history.
+The current experience records use the supplied résumé roles and dates. Independent and project-based roles overlap in time; the timeline does not add overlapping periods together.
 
 ## Recommendations and letters
 
@@ -96,10 +91,10 @@ Update these fields inside the existing `profile` mapping:
   linkedin: "https://www.linkedin.com/in/YOUR-PROFILE/"
   github: "https://github.com/YOUR-USERNAME"
   resume: "assets/resume.pdf"
-  portrait: "assets/portrait.jpg"
+  portrait: "assets/portrait.png"
 ```
 
-Blank contact links are omitted. Add the corresponding local files. The real profile separately labels seven years of overall experience including internship and five years of professional software development, based on supplied information. Confirm against your final CV before publication. Those figures are not added together.
+Blank contact links are omitted. Add the corresponding local files. The profile shows 7+ years of combined professional experience as stated in the résumé, and a software engineering start year of 2020. These figures are not added together.
 
 ## YAML editing format
 
@@ -141,7 +136,7 @@ Both YAML requests use fetch cache: no-store, so browsers fetch the latest conte
 
 ## Education, articles, and footer links
 
-The `education` and `articles` mappings in `content.yaml` start empty. With preview enabled, `demo-content.yaml` provides two fictional education entries and three fictional articles. Sample articles expand inline. With preview disabled, the site uses the real records and shows coming-soon text for empty sections. Add more named records using the same structure:
+The `education` mapping contains the supplied Universidad De Manila record. The `articles` mapping is empty, and its section stays hidden until real article details are supplied. Add more named records using the same structure:
 
 ```yaml
 education:
@@ -158,11 +153,11 @@ articles:
     url: "https://example.com/your-article"
 ```
 
-Fill in `profile.github` and `profile.linkedin` to show live links in the shared footer. Until a profile URL is supplied, the footer displays GitHub as an inactive placeholder. Education and articles use sample records while preview is enabled. Recommendation letters always come from the separate `letters.yaml` file. The homepage Skills section reuses your existing skills and displays them as category/value rows. All original homepage sections remain in place.
+The GitHub profile is already linked in the shared footer. Add `profile.linkedin` later to display that link too. Real education and article records are used with preview disabled. Recommendation letters always come from the separate `letters.yaml` file. The homepage Skills section reuses your existing skills and displays them as category/value rows. All original homepage sections remain in place.
 
 ## Recommendation letters in YAML
 
-All recommendation letter content lives in `letters.yaml`. The file starts with six editable samples. Reviews keeps the same compact list, with four letters visible and the remaining letters under “View more letters”. Each text letter opens the shared `letter.html` page in a new tab.
+All recommendation letter content lives in `letters.yaml`. The file contains the supplied Automox recommendation letters. Reviews keeps the same compact list, with four letters visible and the remaining letters under “View more letters”. Each text letter opens the shared `letter.html` page in a new tab.
 
 Add a named record under `letters`. The name becomes its ID and URL; for example, `manager` opens `letter.html?id=manager`:
 
@@ -171,6 +166,8 @@ letters:
   manager:
     name: "Author name"
     role: "Title and company"
+    role_group: "senior_manager"
+    date_sort: "2026-10-09"
     relationship: "My direct manager"
     date: "Letter date"
     title: "Letter of recommendation"
@@ -184,12 +181,18 @@ Use the existing quoted-string YAML format: two-space indentation and `\n\n` bet
 
 If you already have a PDF or image, set `file` to its relative path, such as `"assets/letters/manager.pdf"`, and leave `body` empty. The list opens the file directly. You can optionally set `letter_label: "Read letter (PDF) ↗"`. Include each referenced file when deploying.
 
-Letters linked from `testimonials` are still included in the list; duplicate URLs appear once. To link a testimonial to a YAML letter, set its `letter` field to `"letter.html?id=manager"`. Records with no author or no usable body/file are omitted. Unknown letter IDs show a useful message and a link back to Reviews. The `letters.yaml` records are independent of the preview toggle, so your approved letters will not be replaced by demo data.
+Letters are sorted by `role_group`: `senior_manager`, `lead_engineer`, `principal_engineer`, `staff_engineer`, `senior_engineer`, then `technical_support_engineer`. Within each group, `date_sort` in `YYYY-MM-DD` format orders the newest first; undated letters come after dated letters in the same group. Nate’s undated letter ranks first because he is the Senior Manager. Dates are shown in the letter list. Letter excerpts supply the Reviews quotes; the sample numeric rating is hidden when these records load. Duplicate document URLs appear once. To link a testimonial to a YAML letter, set its `letter` field to `"letter.html?id=manager"`. Records with no author or no usable body/file are omitted. Unknown letter IDs show a useful message and a link back to Reviews. The `letters.yaml` records are independent of the preview toggle, so your approved letters will not be replaced by demo data.
 
 Work experience appears before Skills on the homepage.
 
-Education cards use a two-column grid on larger screens and stack on mobile. Set each education record's optional `image` field to a local school image, for example `"assets/school-campus.jpg"`. Images fade into the card surface above the text, with a quieter treatment in dark mode. Empty or failed images leave a plain card. The preview uses two fictional campus illustrations (`assets/demo-campus.svg` and `assets/demo-academy.svg`), not photographs of real schools.
+Education cards use a two-column grid on larger screens and stack on mobile. Set each education record's optional `image` field to a local school image, for example `"assets/school-campus.jpg"`. Images fade into the card surface above the text, with a quieter treatment in dark mode. Empty or failed images leave a plain card. The current degree card uses `assets/education-udm.svg`, a decorative monogram for the named university.
 
 ## Typography
 
 Ubuntu is used for headings, body text, navigation, and education cards. Ubuntu Mono is used for dates, project numbers, tags, and small technical labels. The fonts are bundled locally in `assets/fonts`, including the Ubuntu Font Licence and copyright notice; there are no external font service requests. Font loading uses `font-display: swap` and system fallbacks. Keep the font files and their license in the deployed site.
+
+Projects can include an optional HTTPS `url` and `url_label` in `content.yaml`. These appear as direct project-resource links on the Work page and open in a new tab. The API tooling, Automox MCP proof of concept, and Project Q knowledge-base descriptions and URLs were supplied by Dan Ray. Their external contents were not fetched successfully; no credentials were copied into the portfolio.
+
+## Ticket lifecycle case study
+
+The Automox experience entry links to `work.html#ticket-lifecycle` through a themed inline SVG preview. The case study’s introduction, team value, philosophy, and five expandable stages are editable under `support_lifecycle` in `content.yaml`. Its circular five-arrow SVG diagram and the experience preview use the site’s theme variables for light and dark modes; selecting a stage opens its breakdown.

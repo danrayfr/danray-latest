@@ -46,6 +46,60 @@ function letterAction(className, label) {
   link.append(element('span', 'letter-action-label', 'Read Letter'));
   return link;
 }
+function lifecycleDiagram(compact = false, stages = []) {
+  const ns = 'http://www.w3.org/2000/svg';
+  const svgNode = (tag, attributes = {}, text) => {
+    const node = document.createElementNS(ns, tag);
+    Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, value));
+    if (text) node.textContent = text;
+    return node;
+  };
+  const svg = svgNode('svg', {viewBox: '0 0 520 520', class: `lifecycle-wheel${compact ? ' lifecycle-wheel-preview' : ''}`});
+  if (compact) svg.setAttribute('aria-hidden', 'true');
+  else { svg.setAttribute('role', 'group'); svg.setAttribute('aria-label', 'Five-stage ticket lifecycle. Select a stage to read its breakdown.'); }
+  const point = (radius, angle) => {
+    const radians = angle * Math.PI / 180;
+    return `${(260 + radius * Math.cos(radians)).toFixed(2)} ${(260 + radius * Math.sin(radians)).toFixed(2)}`;
+  };
+  stages.forEach((stage, index) => {
+    const label = stage.title;
+    const start = -90 + index * 72, end = start + 72;
+    const path = `M ${point(218, start)} A 218 218 0 0 1 ${point(218, end - 12)} L ${point(174, end + 3)} L ${point(130, end - 12)} A 130 130 0 0 0 ${point(130, start)} L ${point(174, start + 15)} Z`;
+    const group = svgNode(compact ? 'g' : 'a', {class: `lifecycle-sector lifecycle-sector-${index + 1}`});
+    if (!compact) {
+      group.setAttribute('href', `#lifecycle-stage-${index + 1}`);
+      group.setAttribute('aria-label', `Stage ${index + 1}: ${label}`);
+      group.addEventListener('click', () => {
+        const detail = document.getElementById(`lifecycle-stage-${index + 1}`);
+        if (detail) detail.open = true;
+      });
+    }
+    group.append(svgNode('path', {d: path}));
+    const radians = (start + 30) * Math.PI / 180;
+    const x = 260 + 174 * Math.cos(radians), y = 260 + 174 * Math.sin(radians);
+    group.append(svgNode('text', {x, y: y - 16, class: 'wheel-number'}, String(index + 1).padStart(2, '0')));
+    const lines = [];
+    label.split(' ').forEach(word => {
+      const last = lines.length - 1;
+      if (last >= 0 && `${lines[last]} ${word}`.length <= 12) lines[last] += ` ${word}`;
+      else lines.push(word);
+    });
+    const text = svgNode('text', {x, y: y + 7, class: 'wheel-label'});
+    lines.forEach((line, lineIndex) => text.append(svgNode('tspan', {x, dy: lineIndex ? 18 : 0}, line)));
+    group.append(text);
+    svg.append(group);
+  });
+  svg.append(svgNode('text', {x: 260, y: 233, class: 'wheel-center-caption'}, 'TICKET LIFECYCLE'),
+    svgNode('text', {x: 260, y: 267, class: 'wheel-center-title'}, 'Support as'),
+    svgNode('text', {x: 260, y: 295, class: 'wheel-center-title'}, 'a feature.'));
+  return svg;
+}
+function compareLetters(a, b) {
+  const priorities = ['senior_manager', 'lead_engineer', 'principal_engineer', 'staff_engineer', 'senior_engineer', 'technical_support_engineer'];
+  const rank = item => { const index = priorities.indexOf(item.role_group); return index < 0 ? priorities.length : index; };
+  const date = item => /^\d{4}-\d{2}-\d{2}$/.test(item.date_sort || '') ? item.date_sort : '';
+  return rank(a) - rank(b) || date(b).localeCompare(date(a));
+}
 function renderLetter(letters, profileName) {
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id') || document.body.dataset.letterId;
@@ -63,25 +117,36 @@ function renderLetter(letters, profileName) {
   item.body.split(/\n\s*\n/).filter(text => text.trim()).forEach(text => body.append(element('p', '', text.trim())));
   const signature = document.getElementById('letter-signature');
   if (item.closing) signature.append(element('span', '', item.closing));
-  signature.append(element('strong', '', item.name));
-  if (item.role) signature.append(element('span', '', item.role));
+  if (item.signature) item.signature.split('\n').forEach((line, index) => signature.append(element(index === 0 ? 'strong' : 'span', '', line)));
+  else {
+    signature.append(element('strong', '', item.name));
+    if (item.role) signature.append(element('span', '', item.role));
+  }
   document.title = `${item.name} — Recommendation | ${profileName}`;
 }
 function renderPortfolio(data) {
   const p = data.profile;
   setText('name', p.name); setText('location', p.location); setText('headline', p.headline);
   setText('intro', p.intro); setText('role', p.role); setText('avatar', p.initials);
-  setText('total-years', p.total_years); setText('dev-years', p.development_years);
+  setText('total-years', p.total_years); setText('development-since', p.development_since);
   setText('experience-note', p.experience_note); setText('contact-note', p.contact_note);
   const page = document.body.dataset.page || 'home';
   document.title = page === 'home' ? `${p.name} — ${p.headline}` : `${page === 'work' ? 'Work' : page === 'letter' ? 'Sample recommendation' : 'Reviews'} | ${p.name}`;
   document.querySelector('meta[name="description"]').content = p.intro;
   const portrait = safeLink(p.portrait, true);
-  if (portrait && document.getElementById('avatar')) {
+  ['avatar', 'brand-avatar'].forEach(id => {
+    const target = document.getElementById(id);
+    if (!target) return;
+    target.textContent = p.initials;
+    if (!portrait) return;
+    target.className += ' has-photo';
     const image = element('img'); image.src = portrait; image.alt = '';
-    image.addEventListener('error', () => setText('avatar', p.initials));
-    document.getElementById('avatar').replaceChildren(image);
-  }
+    image.addEventListener('error', () => {
+      target.textContent = p.initials;
+      target.className = target.className.replace(/\s*has-photo/g, '');
+    });
+    target.replaceChildren(image);
+  });
   setText('about-title', data.about.heading); setText('about-text', data.about.text); setText('about-secondary', data.about.secondary);
   if (document.getElementById('principles')) Object.values(data.principles).forEach((item, i) => {
     const card = element('article');
@@ -92,6 +157,13 @@ function renderPortfolio(data) {
     const card = element('article', 'project'); card.id = `project-${item.number}`; const header = element('div', 'project-header'); const body = element('div');
     body.append(element('p', 'project-category', item.category), element('h3', '', item.title), element('p', 'project-summary', item.summary));
     const tags = element('div', 'tags'); item.tags.split('|').forEach(tag => tags.append(element('span', 'tag', tag.trim()))); body.append(tags);
+    const resourceUrl = safeLink(item.url);
+    if (resourceUrl) {
+      const link = element('a', 'project-resource', item.url_label || 'View project');
+      link.href = resourceUrl; link.target = '_blank'; link.rel = 'noopener noreferrer';
+      link.setAttribute('aria-label', `${item.url_label || 'View project'}: ${item.title} (opens in a new tab)`);
+      body.append(link);
+    }
     const details = element('details'); details.append(element('summary', '', 'Behind the work'));
     const panel = element('div', 'detail-body');
     [['Context', item.context], ['My approach', item.approach], ['What this brings', item.takeaway]].forEach(([title, text]) => panel.append(element('h4', '', title), element('p', '', text)));
@@ -105,9 +177,18 @@ function renderPortfolio(data) {
     const avatar = element('span', 'recommender-avatar', item.initials || item.name.split(' ').map(n => n[0]).slice(0, 2).join(''));
     const photo = safeLink(item.photo, true);
     if (photo) { const img = element('img'); img.src = photo; img.alt = ''; img.loading = 'lazy'; img.addEventListener('error', () => { avatar.textContent = item.initials || '•'; }); avatar.replaceChildren(img); }
-    const attribution = element('div'); attribution.append(element('p', 'quote-name', item.name), element('p', 'quote-role', item.role));
+    const attribution = element('div'); const name = element('p', 'quote-name', item.name);
+    const profileUrl = safeLink(item.profile_url);
+    if (profileUrl) {
+      const profile = element('a', 'testimonial-profile', item.name); profile.href = profileUrl;
+      profile.target = '_blank'; profile.rel = 'noopener noreferrer';
+      profile.setAttribute('aria-label', `${item.name} on LinkedIn (opens in a new tab)`);
+      name.replaceChildren(profile);
+    }
+    attribution.append(name, element('p', 'quote-role', item.role));
     identity.append(avatar, attribution); card.append(identity);
-    if (item.relationship) card.append(element('p', 'recommendation-context', item.relationship));
+    const context = [item.relationship, item.date].filter(Boolean).join(' · ');
+    if (context) card.append(element('p', 'recommendation-context', context));
     const letter = safeLink(item.letter, true);
     if (letter) {
       const link = letterAction('letter-link', item.letter_label || 'Read full letter');
@@ -129,6 +210,7 @@ function renderPortfolio(data) {
     if (projectUrl && item.project_title) {
       const preview = element('a', 'experience-project'); preview.href = projectUrl;
       if (new URL(projectUrl).origin !== location.origin) { preview.target = '_blank'; preview.rel = 'noopener noreferrer'; }
+      if (item.project_diagram === 'ticket_lifecycle') preview.append(lifecycleDiagram(true, Object.values(data.support_lifecycle?.stages || {})));
       const imageUrl = safeLink(item.project_image, true);
       if (imageUrl) { const image = element('img'); image.src = imageUrl; image.alt = ''; image.loading = 'lazy'; preview.append(image); }
       const text = element('div'); text.append(element('strong', '', item.project_title));
@@ -136,6 +218,28 @@ function renderPortfolio(data) {
     }
     row.append(icon, body); document.getElementById('timeline').append(row);
   });
+  const lifecycle = data.support_lifecycle;
+  if (lifecycle && document.getElementById('lifecycle-map')) {
+    document.getElementById('lifecycle-diagram').append(lifecycleDiagram(false, Object.values(lifecycle.stages || {})));
+    ['title', 'intro', 'goal', 'feedback', 'principles', 'why', 'value', 'philosophy'].forEach(key => setText(`lifecycle-${key}`, lifecycle[key]));
+    setText('lifecycle-philosophy-text', lifecycle.philosophy_text);
+    Object.values(lifecycle.stages || {}).forEach((stage, index) => {
+      const number = String(index + 1).padStart(2, '0');
+      const step = element('li');
+      const link = element('a'); link.href = `#lifecycle-stage-${index + 1}`;
+      link.append(element('span', 'lifecycle-number', number), element('span', '', stage.title));
+      step.append(link); document.getElementById('lifecycle-map').append(step);
+      const detail = element('details', 'lifecycle-stage'); detail.id = `lifecycle-stage-${index + 1}`;
+      const summary = element('summary');
+      const heading = element('span'); heading.append(element('strong', '', stage.title), element('span', 'lifecycle-summary', stage.summary));
+      summary.append(element('span', 'lifecycle-step-number', number), heading);
+      const body = element('div', 'lifecycle-stage-body'); body.append(element('p', '', stage.description));
+      const checks = element('ul'); stage.checks.split('|').forEach(check => checks.append(element('li', '', check.trim())));
+      body.append(checks); detail.append(summary, body);
+      link.addEventListener('click', () => { detail.open = true; });
+      document.getElementById('lifecycle-stages').append(detail);
+    });
+  }
   const skills = document.getElementById('skills');
   if (skills) Object.values(data.skills || {}).forEach(item => {
     const row = element('div', 'skill-row');
@@ -169,7 +273,8 @@ function renderPortfolio(data) {
   const articles = document.getElementById('articles');
   if (articles) {
     const entries = Object.values(data.articles || {}).filter(item => item.title);
-    if (!entries.length) articles.append(element('p', 'empty-state', 'Articles coming soon.'));
+    const articleSection = document.getElementById('articles-section');
+    if (articleSection) articleSection.hidden = entries.length === 0;
     entries.forEach(item => {
       const record = element('article', 'article-item');
       if (item.year) record.append(element('p', 'record-date', item.year));
@@ -195,7 +300,7 @@ function renderPortfolio(data) {
       const href = safeLink(item.letter, true);
       if (!href || seen.has(href)) return false;
       seen.add(href); return true;
-    });
+    }).sort(compareLetters);
     if (!entries.length) letters.append(element('p', 'empty-state', 'Recommendation letters coming soon.'));
     const list = element('div', 'letter-list'); letters.append(list);
     let moreList;
@@ -209,6 +314,7 @@ function renderPortfolio(data) {
       const info = element('div', 'letter-info');
       info.append(element('h3', '', item.name || 'Recommendation letter'));
       if (item.role) info.append(element('p', 'muted', item.role));
+      if (item.date) info.append(element('p', 'letter-list-date', item.date));
       if (item.relationship) info.append(element('p', 'letter-relationship', item.relationship));
       const link = letterAction('letter-read', item.letter_label || 'Read letter');
       link.href = safeLink(item.letter, true); link.target = '_blank'; link.rel = 'noopener noreferrer';
@@ -229,13 +335,13 @@ function renderPortfolio(data) {
   }
   const links = document.getElementById('contact-links');
   if (!links) return;
-  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email)) {
-    const email = element('a', 'button', 'Say hello ↗'); email.href = `mailto:${p.email}`; links.append(email);
-  }
-  [['LinkedIn', p.linkedin, false], ['GitHub', p.github, false], ['Résumé', p.resume, true]].forEach(([title, url, local]) => {
+  [['LinkedIn', p.linkedin, false, 'linkedin'], ['GitHub', p.github, false, 'github'], ['Résumé', p.resume, true, 'document']].forEach(([title, url, local, icon]) => {
     const href = safeLink(url, local); if (!href) return;
-    const a = element('a', 'text-link', `${title} ↗`); a.href = href;
-    if (new URL(href).origin !== location.origin) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+    const a = element('a', 'contact-link'); a.href = href;
+    const symbol = element('span', `contact-icon contact-icon-${icon}`);
+    symbol.setAttribute('aria-hidden', 'true');
+    a.append(symbol, element('span', '', title));
+    a.target = '_blank'; a.rel = 'noopener noreferrer';
     links.append(a);
   });
   document.getElementById('contact-empty').hidden = links.children.length > 0;
@@ -284,9 +390,16 @@ if (typeof document !== 'undefined') {
           letter_label: item.letter_label || 'Read letter ↗'
         }]));
       }
+      if (document.getElementById('testimonials') && data.recommendation_letters) {
+        const letterTestimonials = Object.entries(data.recommendation_letters).filter(([, item]) => item.excerpt).map(([id, item]) => [id, {
+          ...item, quote: item.excerpt, photo: '', letter_label: 'Read Letter'
+        }]);
+        data.testimonials = Object.fromEntries([...letterTestimonials, ...Object.entries(data.testimonials || {})].sort((a, b) => compareLetters(a[1], b[1])));
+        document.getElementById('review-summary').hidden = true;
+      }
       renderPortfolio(data);
       if (document.getElementById('letter-body')) renderLetter(data.letters, data.profile.name);
     })
     .catch(error => { document.getElementById('load-error').hidden = false; console.error(error); });
 }
-if (typeof module !== 'undefined') module.exports = {parseContentYaml};
+if (typeof module !== 'undefined') module.exports = {parseContentYaml, compareLetters};

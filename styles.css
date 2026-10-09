@@ -98,3 +98,67 @@ body[data-theme="dark"] .education-image{opacity:.45}
 
 /* The support philosophy panel is a static catchphrase. */
 .feature-tagline{position:relative;z-index:1;max-width:220px;margin-top:20px;font-size:12px;line-height:1.6}
+
+.letter-info .letter-list-date{font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-top:5px}
+
+.project-resource{display:inline-block;margin-top:14px;font-size:12px;color:var(--green);text-decoration:underline;text-underline-offset:3px}
+.project-resource:hover{color:var(--ink)}
+
+/* Portrait branding, with a shorter name on small screens. */
+.brand>.brand-name{display:inline}
+.brand-mobile{display:none}
+.brand-icon{overflow:hidden;flex-shrink:0}
+.brand-icon.has-photo{border:0}
+.brand-icon img{display:block;width:100%;height:100%;object-fit:cover}
+.avatar.has-photo img,.brand-icon.has-photo img{transform:scale(1.6);transform-origin:61% 46%}
+.testimonial-profile:hover{text-decoration:underline;text-underline-offset:3px}
+.recommendation blockquote{white-space:pre-line}
+@media(max-width:620px){.brand-desktop{display:none}.brand-mobile{display:inline}.brand>.brand-name{display:inline}}
+
+.contact-links{align-items:center;gap:24px}
+.contact-link{display:inline-flex;align-items:center;gap:8px;color:var(--muted)}
+.contact-link:hover{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
+.contact-icon{display:block;width:17px;height:17px;flex-shrink:0;background:currentColor;mask:center/contain no-repeat;-webkit-mask:center/contain no-repeat}
+.contact-icon-linkedin{mask-image:url("assets/icon-linkedin.svg");-webkit-mask-image:url("assets/icon-linkedin.svg")}
+.contact-icon-github{mask-image:url("assets/icon-github.svg");-webkit-mask-image:url("assets/icon-github.svg")}
+.contact-icon-document{mask-image:url("assets/icon-document.svg");-webkit-mask-image:url("assets/icon-document.svg")}
+
+.lifecycle-section h2{margin-top:14px;max-width:570px}
+.lifecycle-principles{font-size:11px;color:var(--accent);margin-top:20px}
+.lifecycle-stage{margin:0;border-top:1px solid var(--line);scroll-margin-top:100px}
+.lifecycle-stage:last-child{border-bottom:1px solid var(--line)}
+.lifecycle-stage summary{display:flex;width:100%;padding:18px 0;gap:16px;color:var(--ink)}
+.lifecycle-stage summary:after{margin-left:auto;color:var(--accent)}
+.lifecycle-step-number{font-family:var(--font-mono);color:var(--accent);font-size:13px}
+.lifecycle-stage strong{display:block;font-size:14px;font-weight:500}
+.lifecycle-summary{display:block;font-size:11px;color:var(--muted);margin-top:3px}
+.lifecycle-stage-body{padding:0 28px 22px;font-size:12px;color:var(--muted)}
+.lifecycle-stage-body ul{padding-left:18px;margin:14px 0 0}.lifecycle-stage-body li+li{margin-top:6px}
+.lifecycle-value{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:28px}
+.lifecycle-value h3{font-size:14px}.lifecycle-value p,.lifecycle-philosophy p{font-size:12px;color:var(--muted);margin-top:10px}
+.lifecycle-philosophy{border-left:2px solid var(--accent);padding:0 0 0 18px;margin-top:28px}.lifecycle-philosophy h3{font-size:20px}
+@media(max-width:620px){.lifecycle-value{grid-template-columns:1fr;gap:20px}.lifecycle-stage-body{padding-left:0;padding-right:0}}
+
+
+
+.lifecycle-diagram{margin:24px auto;max-width:480px}
+.lifecycle-wheel{display:block;width:100%;height:auto;overflow:visible}
+.lifecycle-sector path{fill:var(--soft);stroke:var(--bg);stroke-width:4;stroke-linejoin:round;transition:fill .15s}
+.lifecycle-sector-2 path,.lifecycle-sector-4 path{fill:var(--line)}
+.lifecycle-sector-3 path{fill:var(--surface);stroke:var(--line);stroke-width:2}
+.lifecycle-sector text{text-anchor:middle;fill:var(--ink);font-family:var(--font-sans);pointer-events:none}
+.lifecycle-sector .wheel-number{font-family:var(--font-mono);font-size:21px;fill:var(--accent)}
+.lifecycle-sector .wheel-label{font-size:15px}
+.lifecycle-sector:hover path,.lifecycle-sector:focus-visible path{fill:var(--art);stroke:var(--accent);stroke-width:2}
+.lifecycle-wheel .wheel-center-caption{text-anchor:middle;fill:var(--muted);font-family:var(--font-mono);font-size:11px;letter-spacing:1px}
+.lifecycle-wheel .wheel-center-title{text-anchor:middle;fill:var(--ink);font-family:var(--font-sans);font-size:25px;font-weight:500}
+.experience-project>.lifecycle-wheel-preview{width:128px;min-width:80px;flex-shrink:0;align-self:center}
+.lifecycle-map{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);list-style:none}
+.lifecycle-map:focus-within{position:static;width:auto;height:auto;margin:12px 0;clip-path:none}
+.lifecycle-map a{display:inline-flex;gap:8px}
+@media(max-width:620px){.experience-project>.lifecycle-wheel-preview{width:94px}.lifecycle-diagram{margin:20px -6px}}
+@media(prefers-reduced-motion:reduce){.lifecycle-sector path{transition:none}}
+
+.lifecycle-goal{margin-top:24px;padding:22px 24px;background:var(--soft);border-radius:10px}
+.lifecycle-goal h3{font-size:19px;color:var(--accent)}
+.lifecycle-goal p{font-size:12px;color:var(--muted);margin-top:12px}

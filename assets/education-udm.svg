@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360">
+  <rect width="800" height="360" fill="#dce5ef"/>
+  <g fill="none" stroke="#becddd"><path d="M0 60h800M0 120h800M0 180h800M0 240h800M0 300h800M100 0v360M200 0v360M300 0v360M400 0v360M500 0v360M600 0v360M700 0v360"/></g>
+  <circle cx="650" cy="90" r="170" fill="#cbd9e8"/>
+  <text x="52" y="187" font-family="Arial,sans-serif" font-size="112" font-weight="bold" letter-spacing="-5" fill="#526e91">UDM</text>
+  <path d="M57 220h280" stroke="#8ca4c0" stroke-width="2"/>
+  <text x="57" y="260" font-family="Arial,sans-serif" font-size="21" letter-spacing="4" fill="#526e91">UNIVERSIDAD DE MANILA</text>
+</svg>

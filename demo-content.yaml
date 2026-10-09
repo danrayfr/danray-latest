@@ -5,7 +5,7 @@ summary:
 experience:
   northstar:
     initials: "N"
-    logo: "assets/demo-northstar.svg"
+    logo: ""
     dates: "2024 – Present"
     label: ""
     title: "Developer Support Engineer"
@@ -18,7 +18,7 @@ experience:
     project_image: ""
   bridgeway:
     initials: "B"
-    logo: "assets/demo-bridgeway.svg"
+    logo: ""
     dates: "2021 – 2024"
     label: ""
     title: "Software Engineer"
@@ -28,10 +28,10 @@ experience:
     project_url: "#project-02"
     project_title: "Internal tools, thoughtfully built"
     project_summary: "A sample project preview showing how a company entry can link to related work."
-    project_image: "assets/demo-project.svg"
+    project_image: ""
   fieldnote:
     initials: "F"
-    logo: "assets/demo-fieldnote.svg"
+    logo: ""
     dates: "2019 – 2021"
     label: ""
     title: "Technical Support Engineer"
@@ -42,7 +42,7 @@ testimonials:
   avery:
     quote: "What stood out was the care behind the technical work. We had a difficult integration issue, and every update made the problem clearer. By the end, we understood both the fix and why it worked."
     initials: "AM"
-    photo: "assets/demo-avery.svg"
+    photo: ""
     name: "Avery Morgan"
     role: "Engineering Lead, Northstar Labs"
     relationship: "Colleague · Sample recommendation letter"
@@ -51,7 +51,7 @@ testimonials:
   jordan:
     quote: "A thoughtful engineer who listens closely, follows the evidence, and takes ownership. The combination of software development experience and clear communication made complex support conversations much easier."
     initials: "JL"
-    photo: "assets/demo-jordan.svg"
+    photo: ""
     name: "Jordan Lee"
     role: "Customer Success Lead, Bridgeway Software"
     relationship: "Colleague · Sample feedback"
@@ -64,13 +64,13 @@ education:
     dates: "2014 – 2018"
     qualification: "Bachelor of Science in Computer Science"
     school: "Sample University"
-    image: "assets/demo-campus.svg"
+    image: ""
     description: "A sample education entry showing how a degree, school, and dates will appear."
   course:
     dates: "2025"
     qualification: "Certificate in Applied AI Development"
     school: "Sample Learning Academy"
-    image: "assets/demo-academy.svg"
+    image: ""
     description: "A sample course entry for visualizing continuing education."
 articles:
   investigation:
