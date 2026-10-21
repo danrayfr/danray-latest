@@ -223,6 +223,17 @@ education:
     description: "Dean’s Lister, 2018–2020 · Best Thesis, 2019–2020"
 articles:
 testimonials:
+  michelle_vo:
+    name: "Michelle Vo"
+    initials: "MV"
+    role: "Program Manager · Former Developer Support Engineer at Meta"
+    relationship: "Managed Dan Ray directly · Meta"
+    date: "October 21, 2026"
+    date_sort: "2026-10-21"
+    photo: ""
+    profile_url: "https://www.linkedin.com/in/michelle-tuyet-vo/"
+    letter: "assets/letters/Michelle-Vo-Recommendation.pdf"
+    quote: "I worked with Dan for several years as a Program Manager and Developer Support Engineer at Meta, in the organization formerly known as Oculus. Our support scope covered 20+ developer products across VR, AR, and mixed reality, including Presence Platform, hand tracking, Meta XR SDKs, and the Audio SDK.\n\nDan brought strong technical knowledge and ownership to a complex, evolving platform. He worked closely with developers and internal teams to debug issues, find practical workarounds, and see problems through. I trusted him to stay engaged and follow through as our support volume grew.\n\nHe consistently met our KPI and SLA expectations, with excellent CSAT scores. He also helped colleagues build their skills, created a useful knowledge base, and contributed to team performance monitoring and our dashboard.\n\nI appreciated his patience with developers, openness to feedback, and dependable approach. I’d happily work with Dan again and recommend him for senior developer support and technical leadership roles."
   joseph_bandoy:
     name: "Dr. Joseph Vermont Bandoy"
     initials: "JB"

@@ -95,7 +95,7 @@ function lifecycleDiagram(compact = false, stages = []) {
   return svg;
 }
 function compareLetters(a, b) {
-  const priorities = ['senior_manager', 'lead_engineer', 'principal_engineer', 'staff_engineer', 'senior_engineer', 'technical_support_engineer'];
+  const priorities = ['vice_president', 'senior_manager', 'lead_engineer', 'principal_engineer', 'staff_engineer', 'senior_engineer', 'technical_support_engineer'];
   const rank = item => { const index = priorities.indexOf(item.role_group); return index < 0 ? priorities.length : index; };
   const date = item => /^\d{4}-\d{2}-\d{2}$/.test(item.date_sort || '') ? item.date_sort : '';
   return rank(a) - rank(b) || (date(a) || '9999-12-31').localeCompare(date(b) || '9999-12-31');
